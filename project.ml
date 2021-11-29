@@ -33,6 +33,24 @@ let insert_table (tbl : table) (items : string list) : table=
       else Table (false, lis)
   | _ -> Table (true, [[]])
            
+
+
+let select_table (tbl : table) (param : string list) (checker : string) : string =
+  match tbl with
+  | Table (_,lis) -> 
+  | _ -> false
+  
+let rec find param (rec : Record) (tbl : table) (param : string list)
+  match param
+   | hd : tl
+   | _ -> false
+
+let rec find_item (rec: Record( (index : int) : string = 
+  match rec with
+   | hd _ where rec: itemOf(hd) = index -> hd
+   | _ : tl find_item tl: index
+   | _ -> false
+   
   
 (* Test 1: Create a table with one row to hold the categories *)
 let params = ["Name"; "Age"; "Height"; "Weight"]
