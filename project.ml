@@ -68,9 +68,11 @@ let rec slct_tbl (tbl : table) (param : string list) : string list list =
 	| else false
 	| _ -> [[]]*)
 	
-let rec where (tbl : table) (param : string list) index = 
+(*let rec where (tbl : table) (param : string list) index = 
 	match tbl, param, index with
-	| Table (_, lis) hd :: tl -> val 
+	| Table (_, lis) hd :: tl -> if val index of get_category_index exist then true
+	| else false*)
+	
              
 let select_table (tbl : table) (param : string list) : string list list = 
   slct_tbl tbl param
