@@ -28,9 +28,12 @@ let rec ins_tbl (p : string list list) (lis : string list list) : string list li
   | hd :: tl -> hd :: ins_tbl tl lis
   | [] -> lis
   
-let rec get_list_cat (p : string list list) (index : int) : string list = 
+let rec get_list_cat (p : string list list) (index : int) (checker : string) : string list = 
   match p with
-  | hd :: tl -> (List.nth hd index) :: get_list_cat tl index
+  | hd :: tl -> if checker <> "null" then
+					if (List.nth hd index) = checker then (List.nth hd index) :: get_list_cat tl index checker
+					else [] :: get_list_cat tl index checker
+				else (List.nth hd index) :: get_list_cat tl index checker
   | [] -> []
   
 let create_table (params : string list) : table = 
@@ -56,13 +59,14 @@ let insert_table (tbl : table) (items : string list list) : table=
 (* Steps for searching for item in the table: 
 1. For all items in the param list, get indexes of where they are in 
 2. With indicies in hand, gather everything we need from each row in the table*) 
-let rec slct_tbl (tbl : table) (param : string list) : string list list = 
+let rec slct_tbl (tbl : table) (param : string list) (checker : string) : string list list = 
   match tbl, param with
   | Table (_, lis), hd :: tl -> get_list_cat lis (get_category_index (List.hd lis) hd 0) :: (slct_tbl tbl tl)
   | _, [] -> [[]]
+	
              
-let select_table (tbl : table) (param : string list) : string list list = 
-  slct_tbl tbl param
+let select_table (tbl : table) (param : string list) (checker : string) : string list list = 
+  slct_tbl tbl param checker
   
   
 (* Test 1: Create a table with one row to hold the categories *)
@@ -81,5 +85,9 @@ let complete_table = [["Paul"; "23"; "6'2"; "190 lbs"]; ["Ava"; "33"; "5'7"; "11
                       ["Dennis"; "45"; "5'11"; "237 lbs."]; ["Harold"; "19"; "4'11"; "97.3 lbs."]] 
 let db_tbl = insert_table person complete_table;;
 
-select_table db_tbl ["Name"]
-  
+(* Test 4: get the names in the table with no clause*)
+select_table db_tbl ["Name"] "null";;
+
+(* Test 5: Get the names from the table that equal the WHERE condition "Dennis"*)
+(* Should return a list of empty strings and one string "Dennis" within it*)
+select_table db_tbl ["Name"] "Dennis";;
