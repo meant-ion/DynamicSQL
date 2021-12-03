@@ -54,7 +54,23 @@ let insert_table (tbl : table) (items : string list list) : table=
 let rec slct_tbl (tbl : table) (param : string list) : string list list = 
   match tbl, param with
   | Table (_, lis), hd :: tl -> get_list_cat lis (get_category_index (List.hd lis) hd 0) :: (slct_tbl tbl tl)
+  | where_clause
   | _, [] -> [[]]
+  
+(*let rec where_clause (tbl: table) (param : string list) = 
+	match tbl, param with
+	| Table (_,lis), hd :: tl -> if val get_category_index = exist then true
+	| else false*)
+	
+(*let rec where_clause_2 (tbl : table) (param : string list) (checker : index) string list = 
+	match tbl, param, and checker
+	| Table (_,lis), hd :: tl -> if val get_category_index = exist then true
+	| else false
+	| _ -> [[]]*)
+	
+let rec where (tbl : table) (param : string list) index = 
+	match tbl, param, index with
+	| Table (_, lis) hd :: tl -> val 
              
 let select_table (tbl : table) (param : string list) : string list list = 
   slct_tbl tbl param
