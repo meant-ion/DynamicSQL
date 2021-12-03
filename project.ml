@@ -1,3 +1,8 @@
+(*Tyler Pearson
+Jay Elengical
+Final Project
+CS 476*)
+
 open List
 
 (* Parameters for type: string = table name; bool = is_table_deleted; (string list) list = the actual table*)
