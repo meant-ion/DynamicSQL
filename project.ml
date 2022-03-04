@@ -28,47 +28,49 @@ let rec ins_tbl (p : string list list) (lis : string list list) : string list li
   | hd :: tl -> hd :: ins_tbl tl lis
   | [] -> lis
   
+(* Gets the column names from the table *)
 let rec get_list_cat (p : string list list) (index : int) (checker : string) : string list = 
   match p with
   | hd :: tl -> if checker <> "null" then
 					if (List.nth hd index) = checker then (List.nth hd index) :: get_list_cat tl index checker
-					else [] :: get_list_cat tl index checker
+					else get_list_cat tl index checker
 				else (List.nth hd index) :: get_list_cat tl index checker
   | [] -> []
   
 let create_table (params : string list) : table = 
   Table (false, [mk_tbl params])
-        
-(* Gets the acutal table from the table structure *)
-let get_table (tbl : table) : string list list = 
-  match tbl with
-  | Table (_, l) -> l
-  | _ -> [[]] 
-          
+  
 let delete_table (tbl : table) : table = 
   match tbl with
   | Table (false, tab) -> Table (true, tab)
   | _ -> Table (true, [[]])
            
-let insert_table (tbl : table) (items : string list list) : table= 
+let insert_table (tbl : table) (items : string list list) : table = 
   match tbl with
   | Table (_, lis) -> if get_num_categories lis = List.length items then Table (false, List.rev (ins_tbl items lis))
       else Table (false, lis)
-  | _ -> Table (true, [[]])
  
 (* Steps for searching for item in the table: 
 1. For all items in the param list, get indexes of where they are in 
 2. With indicies in hand, gather everything we need from each row in the table*) 
 let rec slct_tbl (tbl : table) (param : string list) (checker : string) : string list list = 
   match tbl, param with
-  | Table (_, lis), hd :: tl -> get_list_cat lis (get_category_index (List.hd lis) hd 0) :: (slct_tbl tbl tl)
+  | Table (_, lis), hd :: tl -> get_list_cat lis (get_category_index (List.hd lis) hd 0) checker :: (slct_tbl tbl tl checker)
   | _, [] -> [[]]
 	
              
-let select_table (tbl : table) (param : string list) (checker : string) : string list list = 
+let select_table (tbl : table) (param : string list) (checker : string) : string list list =  
   slct_tbl tbl param checker
   
-  
+
+(* Callback registers for the C program*)
+(*-------------------------------------*)
+(* Callback for creating a table *)
+let _ = Callback.register "create_table" create_table
+(* Callback for deleting a table *)
+let _ = Callback.register "delete_table" delete_table
+
+
 (* Test 1: Create a table with one row to hold the categories *)
 let params = ["Name"; "Age"; "Height"; "Weight"]
 let person = create_table params

@@ -16,3 +16,11 @@ For now, the main functions implemented within the code (and their semantics) ar
 In regards to the SELECT statement, this is a very, VERY narrow dive into what it would do in a SQL dialect like SQLite. 
 
 Feel free to add any features or improvements to the code. 
+
+CURRENT TO DO LIST:
+    * Implement a stronger "typing" system; i.e. The first value of a column decides the type
+        - First name in name col -> name col type is string
+        - Whole number in age col -> age col type is int
+
+    * Implement a parser with C
+        - Takes input from console and translates statements into code workable with OCaml functions
